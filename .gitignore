@@ -9,6 +9,7 @@ media
 staticfiles
 Test Cases
 media
+Destination
 assests
 db.sqlite3
 
