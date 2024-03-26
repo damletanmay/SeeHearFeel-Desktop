@@ -37,7 +37,6 @@ def resource_path(relative_path):
 cwd = os.getcwd()
 os_name = platform.system().lower()
 assets_file_path = os.path.join(cwd,"assets")
-assets_file_path+='\\'
 
 assets_file_path = resource_path(assets_file_path)
 movie_paths = resource_path("movie_paths.txt")
@@ -191,13 +190,13 @@ def make_movie(video_order,og_video_file_path,audio_commentary_file_path,destina
     progress_bar["value"] = 35
     root.update_idletasks()
 
-    sign_language_video = VideoFileClip(assets_file_path + video_order[0])
+    sign_language_video = VideoFileClip(os.path.join(assets_file_path,video_order[0]))
     
     og_video = VideoFileClip(resource_path(og_video_file_path))
     
     for i in video_order[1:]:
         try:
-            video_clip = VideoFileClip(resource_path(assets_file_path.capitalize() + i))
+            video_clip = VideoFileClip(resource_path(os.path.join(assets_file_path.capitalize(),i)))
             sign_language_video = concatenate_videoclips([sign_language_video,video_clip])
             # setting.exe
             if(round(sign_language_video.duration) >= round(og_video.duration)):
@@ -307,11 +306,11 @@ class VideoUploader:
         self.folder_button.pack(pady=10)
         
         # create DCP button
-        
-        self.dcp_button = tk.Button(self.root, text="Create Movie", command = threading.Thread(target=self.display_textbox).start, width=20)
+        self.dcp_button = tk.Button(self.root, text="Create Movie", command = threading.Thread(target = self.display_textbox).start, width=20)
         self.dcp_button.pack(pady=10)
         self.dcp_button.config(state=tk.DISABLED)
         
+        # dict with paths
         self.uploaded_files = {"movie": None, "subtitles": None, "commentary": None,"folder":None}
 
         # create library page
@@ -343,6 +342,9 @@ class VideoUploader:
 
         self.listbox.bind("<Double-1>", self.on_select)
 
+        # is Movie Processing
+        self.isMovieProcessing = False
+
     # on double click of a movie path, handle 
     def on_select(self,event):
         selected_index = self.listbox.curselection()
@@ -357,11 +359,13 @@ class VideoUploader:
         if choice:
             # try to create a movie
             try:
-                self.create_movie()
+                self.create_movie()               
             except Exception as e:
                 print(e)
                 self.reset_everything() # reset everything if some error occurs 
-                messagebox.showinfo("Alert!","Movie creation failed")        
+                messagebox.showinfo("Alert!","Movie creation failed")
+        
+        
     
     # change_dcP_box whenever each file is updated
     def change_dcp_box(self):
@@ -373,30 +377,42 @@ class VideoUploader:
     
     # upload file paths to uploaded_files variable
     def upload_file(self, file_type):
-                
-        if file_type == "movie":
-            self.uploaded_files["movie"] = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4 *.avi")])
-            if (self.uploaded_files["movie"] != ""):           
-                self.movie_button.config(text=self.uploaded_files["movie"][self.uploaded_files["movie"].rfind('/')+1:])
-                self.change_dcp_box()
-        if file_type == "subtitles":
-            self.uploaded_files["subtitles"] = filedialog.askopenfilename(filetypes=[("Subtitle Files", "*.srt *.vtt")])
-            if (self.uploaded_files["subtitles"] != ""):           
-                self.subtitles_button.config(text=self.uploaded_files["subtitles"][self.uploaded_files["subtitles"].rfind('/')+1:])
-                self.change_dcp_box()
-        if file_type == "commentary":
-            self.uploaded_files["commentary"] = filedialog.askopenfilename(filetypes=[("MP3 Files", "*.mp3")])
-            if (self.uploaded_files["commentary"] != ""):           
-                self.commentary_button.config(text=self.uploaded_files["commentary"][self.uploaded_files["commentary"].rfind('/')+1:])
-                self.change_dcp_box()
-        if file_type == "folder":
-            self.uploaded_files["folder"] = filedialog.askdirectory(title="Select Folder")
-            if (self.uploaded_files["folder"] != ""):           
-                self.folder_button.config(text=self.uploaded_files["folder"][self.uploaded_files["folder"].rfind('/')+1:])
-                self.change_dcp_box()
+        if not self.isMovieProcessing:                
+            if file_type == "movie":
+                self.uploaded_files["movie"] = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4 *.avi")])
+                if (self.uploaded_files["movie"] != ""):           
+                    self.movie_button.config(text=self.uploaded_files["movie"][self.uploaded_files["movie"].rfind('/')+1:])
+                    self.change_dcp_box()
+                else:
+                    self.uploaded_files["movie"] = None
+
+            if file_type == "subtitles":
+                self.uploaded_files["subtitles"] = filedialog.askopenfilename(filetypes=[("Subtitle Files", "*.srt *.vtt")])
+                if (self.uploaded_files["subtitles"] != ""):           
+                    self.subtitles_button.config(text=self.uploaded_files["subtitles"][self.uploaded_files["subtitles"].rfind('/')+1:])
+                    self.change_dcp_box()
+                else:
+                    self.uploaded_files["subtitles"] = None
+
+            if file_type == "commentary":
+                self.uploaded_files["commentary"] = filedialog.askopenfilename(filetypes=[("MP3 Files", "*.mp3")])
+                if (self.uploaded_files["commentary"] != ""):           
+                    self.commentary_button.config(text=self.uploaded_files["commentary"][self.uploaded_files["commentary"].rfind('/')+1:])
+                    self.change_dcp_box()
+                else:
+                    self.uploaded_files["commentary"] = None
+
+            if file_type == "folder":
+                self.uploaded_files["folder"] = filedialog.askdirectory(title="Select Folder")
+                if (self.uploaded_files["folder"] != ""):           
+                    self.folder_button.config(text=self.uploaded_files["folder"][self.uploaded_files["folder"].rfind('/')+1:])
+                    self.change_dcp_box()
+                else:
+                    self.uploaded_files["folder"] = None
 
     # reset buttons once process is over
     def reset_everything (self):
+
         # reset everything 
         self.progress["value"] = 0
         
@@ -407,9 +423,18 @@ class VideoUploader:
         self.commentary_button.config(text="Select Audio Commentary")
         self.folder_button.config(text="Select Destination Folder")
         
+        self.dcp_button.destroy()
+        self.dcp_button = tk.Button(self.root, text="Create Movie", command = threading.Thread(target = self.display_textbox).start, width=20)
+        self.dcp_button.pack(pady=10)
+        self.dcp_button.config(state=tk.DISABLED)
+
+        self.isMovieProcessing = False
         self.change_dcp_box()
         
     def create_movie(self):
+        
+        self.isMovieProcessing = True
+        
         self.dcp_button.config(state=tk.DISABLED) # disable the state
         
         format_destination(self.uploaded_files["folder"]) # format destination folder
@@ -471,5 +496,8 @@ if __name__ == "__main__":
     style.configure("TProgressbar", thickness=15)
     uploader = VideoUploader(root)
     root.mainloop()
+
+# %%
+
 
 
