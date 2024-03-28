@@ -1,3 +1,4 @@
+altgraph==0.17.4
 anyio==4.3.0
 argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
@@ -15,6 +16,8 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 comm==0.2.1
+customtkinter==5.2.2
+darkdetect==0.8.0
 debugpy==1.8.1
 decorator==4.4.2
 defusedxml==0.7.1
@@ -69,6 +72,7 @@ overrides==7.7.0
 packaging==23.2
 pandocfilters==1.5.1
 parso==0.8.3
+pefile==2023.2.7
 Pillow==9.5.0
 platformdirs==4.2.0
 proglog==0.1.10
@@ -78,8 +82,13 @@ psutil==5.9.8
 pure-eval==0.2.2
 pycparser==2.21
 Pygments==2.17.2
+pyinstaller==6.5.0
+pyinstaller-hooks-contrib==2024.3
 python-dateutil==2.8.2
 python-json-logger==2.0.7
+pywin32==306
+pywin32-ctypes==0.2.2
+pywinpty==2.0.12
 PyYAML==6.0.1
 pyzmq==25.1.2
 qtconsole==5.5.1
