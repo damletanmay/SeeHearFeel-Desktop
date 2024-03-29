@@ -13,6 +13,8 @@ Destination
 assests
 db.sqlite3
 movie_paths.txt
+build
+dist
 
 # Backup files #
 *.bak

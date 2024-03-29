@@ -284,7 +284,10 @@ def format_destination(directory_path):
 # %%
 class VideoUploader:
     
-    def __init__(self, root, default_font,title_font):
+    def __init__(self, root, default_font,title_font,medium_font):
+
+        self.default_font = default_font 
+
         # creating a notebook
         self.root = root
         root.title("See Hear Feel")
@@ -318,23 +321,23 @@ class VideoUploader:
         self.progress.pack(pady=10)
 
         # Select Movie button
-        self.movie_button = CTkButton(master=self.create_movie_frame, text="Select Movie", command=lambda: self.upload_file("movie"), width=30)
+        self.movie_button = CTkButton(master=self.create_movie_frame, text="Select Movie", command=lambda: self.upload_file("movie"), width=30,font = default_font)
         self.movie_button.pack(pady=10)
 
         # Select Subtitles button
-        self.subtitles_button = CTkButton(master=self.create_movie_frame, text="Select Subtitles", command=lambda: self.upload_file("subtitles"), width=30)
+        self.subtitles_button = CTkButton(master=self.create_movie_frame, text="Select Subtitles", command=lambda: self.upload_file("subtitles"), width=30,font = default_font)
         self.subtitles_button.pack(pady=10)
     
         # Select Audio Commentary button 
-        self.commentary_button = CTkButton(master=self.create_movie_frame, text="Select Audio Commentary", command=lambda: self.upload_file("commentary"), width=30)
+        self.commentary_button = CTkButton(master=self.create_movie_frame, text="Select Audio Commentary", command=lambda: self.upload_file("commentary"), width=30,font = default_font)
         self.commentary_button.pack(pady=10)
 
         # Select Folder button
-        self.destination_button = CTkButton(master=self.create_movie_frame, text="Select Destination Folder", command=lambda: self.upload_file("folder"), width=30)
+        self.destination_button = CTkButton(master=self.create_movie_frame, text="Select Destination Folder", command=lambda: self.upload_file("folder"), width=30,font = default_font)
         self.destination_button.pack(pady=10)
         
         # create movie button
-        self.create_movie_button = CTkButton(self.create_movie_frame, text="Create Movie", command = threading.Thread(target = self.display_textbox).start, width=20)
+        self.create_movie_button = CTkButton(self.create_movie_frame, text="Create Movie", command = threading.Thread(target = self.display_textbox).start, width=30,font = default_font)
         self.create_movie_button.configure(state=tk.DISABLED)
         self.create_movie_button.pack(pady=10)
         
@@ -348,23 +351,19 @@ class VideoUploader:
         # a text box 
         self.ifFilesExist = StringVar()
         self.ifFilesExist.set("Double Click a Folder to open it")
-        self.library_text_box = CTkLabel(master = self.library_tab_frame, textvariable=self.ifFilesExist)
+        self.library_text_box = CTkLabel(master = self.library_tab_frame, textvariable=self.ifFilesExist,font = default_font)
         self.library_text_box.pack(padx=10, pady=10)
 
         if len(self.processed_movies_path) == 0:
             # If Libary is empty change text
             self.ifFilesExist.set("Library is empty!")
 
-        # self.listbox = tk.Listbox(self.library_tab_frame, yscrollcommand=self.scrollbar.set, selectmode=tk.SINGLE)
-            
-        # self.listbox.pack(side="right", fill="both", expand=True)
-
         self.scrollbar = CTkScrollbar(master=self.library_tab_frame)
         self.scrollbar.pack(side = "right", fill = "y")
 
         # Text box
         self.library_files_list_box = tk.Listbox(self.library_tab_frame, yscrollcommand=self.scrollbar.set, selectmode=tk.SINGLE)
-        self.library_files_list_box.config(bg="#1A1A1A",fg="white",selectforeground="white",selectbackground="#1F538D")
+        self.library_files_list_box.config(bg="#1A1A1A",fg="white",selectforeground="white",selectbackground="#1F538D",font=medium_font)
 
         if len(self.processed_movies_path) != 0:
             for path in self.processed_movies_path:
@@ -397,7 +396,7 @@ class VideoUploader:
                 
     def recreate_create_movie_button(self,createNormal):
         self.create_movie_button.destroy()
-        self.create_movie_button = CTkButton(self.create_movie_frame, text="Create Movie", command = threading.Thread(target = self.display_textbox).start, width=20)
+        self.create_movie_button = CTkButton(self.create_movie_frame, text="Create Movie", command = threading.Thread(target = self.display_textbox).start, width=30,font = self.default_font)
         if createNormal:
             self.create_movie_button.configure(state=tk.NORMAL)
         else:
@@ -574,8 +573,9 @@ if __name__ == "__main__":
     set_appearance_mode("dark")
     set_default_color_theme("dark-blue")
     default_font = CTkFont(family="Aptos", size=16)
-    title_font = CTkFont(family="Aptos", size=26)
-    uploader = VideoUploader(See_Hear_Feel_App,default_font,title_font)
+    medium_font = CTkFont(family="Aptos", size=20)
+    title_font = CTkFont(family="Aptos", size=32)
+    uploader = VideoUploader(See_Hear_Feel_App,default_font,title_font,medium_font)
     See_Hear_Feel_App.mainloop()
 
 
