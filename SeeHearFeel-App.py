@@ -176,11 +176,20 @@ def make_video_order(words):
 def swap_commentary(video_clip,commentary_file,destination_path):
     
     # Load the new audio file
+    audio_clip = AudioFileClip(commentary_file)
+    
+    duration = 0
+    if audio_clip.duration <= video_clip.duration:
+        duration = audio_clip.duration
+    else:
+        duration = video_clip.duration
 
-    audio_clip = AudioFileClip(resource_path(commentary_file))
+
     audio_clip.duration = video_clip.duration 
     # Replace the audio of the video clip with the new audio clip
     video_clip = video_clip.set_audio(audio_clip)
+
+    video_clip = video_clip.subclip(0,duration)
 
     # Write the modified video with the replaced audio to a new file
     video_clip.write_videofile(destination_path,threads = os.cpu_count(),verbose=False,logger=None)
@@ -221,7 +230,6 @@ def make_movie(video_order,og_video_file_path,audio_commentary_file_path,destina
 
     # write integrated video to destination video
     destination_path_video = os.path.join(destination_path, "movie" + og_video_file_path[-4:])
-    
     swap_commentary(sign_language_video,audio_commentary_file_path,destination_path_video)
 
     return True

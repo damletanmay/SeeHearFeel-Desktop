@@ -4,6 +4,7 @@
 #define MyAppName "See Hear Feel"
 #define MyAppVersion "1.0"
 #define MyAppPublisher "Winnovate Systems"
+#define MyAppURL "https://www.example.com/"
 #define MyAppExeName "SeeHearFeel-App.exe"
 #define MyAppAssocName MyAppName + ""
 #define MyAppAssocExt ".myp"
@@ -12,11 +13,14 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{A4BCBA5F-DBE0-427E-BD1D-55348C61EEB6}
+AppId={{F6135EC6-02DB-43F1-9841-57FE90F6B38E}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
+AppPublisherURL={#MyAppURL}
+AppSupportURL={#MyAppURL}
+AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
@@ -24,7 +28,7 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 OutputDir=C:\Users\tanma\OneDrive\Desktop
 OutputBaseFilename=See Hear Feel
-SetupIconFile=E:\Study\Windsor\Sem I\Advanced Software Engineering\SeeHearFeel-Desktop\favicon-icon.ico
+SetupIconFile=E:\Study\Windsor\Sem I\Advanced Software Engineering\SeeHearFeel-Desktop\icon\favicon-icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -38,7 +42,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "E:\Study\Windsor\Sem I\Advanced Software Engineering\SeeHearFeel-Desktop\dist\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\Study\Windsor\Sem I\Advanced Software Engineering\SeeHearFeel-Desktop\dist\assets\*"; DestDir: "{app}/assets"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "E:\Study\Windsor\Sem I\Advanced Software Engineering\SeeHearFeel-Desktop\assets\*"; DestDir: "{app}/assets"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
