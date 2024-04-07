@@ -13,6 +13,11 @@ Download setup from this [Link](https://drive.google.com/drive/folders/1dt3kl2m5
 
 Click here to open [User Manual](https://github.com/damletanmay/SeeHearFeel-Desktop/blob/main/User%20Manual.pdf)
 
+## Code Documentation
+
+After Cloning Repository
+Open file [/html/index.html](https://github.com/damletanmay/SeeHearFeel-Desktop/blob/main/html/index.html)
+
 ## Run the Project
 To run the project, first clone this repository using `git clone https://github.com/damletanmay/SeeHearFeel-Desktop.git`, create a virtual enviornment using `python -m virtualenv env` and activate that virtual enviornment using either `source env\bin\activate` for mac or `env/Scripts/activate` for windows , install requirements using `pip install -r requirements.txt` and run the program using `python SeeHearFeel-App.py` 
 
